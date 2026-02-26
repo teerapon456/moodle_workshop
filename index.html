@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodle Course Creator Manual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Thai', sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: #fff;
+      border-right: 1px solid #e8e8e8;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid #e8e8e8;
+      text-align: center;
+    }
+
+    .sidebar-header .icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #A21D21;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    .sidebar nav {
+      padding: 12px 0;
+    }
+
+    .sidebar nav a {
+      display: block;
+      padding: 10px 24px;
+      color: #555;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: #fff5f0;
+      color: #A21D21;
+      border-left-color: #A21D21;
+    }
+
+    .sidebar nav .nav-section {
+      padding: 16px 24px 6px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #aaa;
+      font-weight: 700;
+    }
+
+    /* Main */
+    .main {
+      margin-left: 280px;
+      flex: 1;
+      padding: 60px;
+      max-width: 1200px;
+    }
+
+    .main>section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 36px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #A21D21;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f96c6c;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      color: #A21D21;
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+      color: #555;
+      margin: 16px 0 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 16px 20px;
+      font-size: 0.92rem;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Step boxes */
+    .step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      min-width: 32px;
+      height: 32px;
+      background: #A21D21;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.92rem;
+      padding-top: 4px;
+    }
+
+    .step-text strong {
+      color: #333;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #fff8f0;
+      border-left: 4px solid #A21D21;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+    }
+
+    .info-box.blue {
+      background: #f0f4ff;
+      border-color: #1565c0;
+    }
+
+    .info-box.green {
+      background: #f0faf0;
+      border-color: #2e7d32;
+    }
+
+    .info-box strong {
+      color: #333;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: #fff5f0;
+      color: #A21D21;
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 2px solid #fee0c8;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    tr:hover td {
+      background: #fafafa;
+    }
+
+    /* Flow */
+    .flow {
+      display: flex;
+      gap: 0;
+      margin: 16px 0;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .flow-step {
+      background: #fff5f0;
+      border: 1px solid #fee0c8;
+      border-radius: 10px;
+      padding: 14px 18px;
+      text-align: center;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .flow-step h4 {
+      color: #A21D21;
+      margin: 0 0 4px;
+      font-size: 0.85rem;
+    }
+
+    .flow-step p {
+      font-size: 0.78rem;
+      color: #777;
+      margin: 0;
+    }
+
+    .flow-arrow {
+      font-size: 1.2rem;
+      color: #A21D21;
+      padding: 0 6px;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge.yes {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .badge.no {
+      background: #fce4ec;
+      color: #c62828;
+    }
+
+    /* Image support */
+    .image-container {
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e8e8e8;
+    }
+
+    .image-caption {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Footer */
+    footer {
+      margin-left: 280px;
+      padding: 20px 40px;
+      text-align: center;
+      color: #aaa;
+      font-size: 0.8rem;
+      border-top: 1px solid #e8e8e8;
+      background: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main,
+      footer {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="icon">📚</div>
+        <h2>คู่มือการใช้งาน Moodle</h2>
+      </div>
+      <nav>
+        <div class="nav-section">แนะนำระบบ</div>
+        <a href="#intro">แนะนำและบทบาท</a>
+        <a href="#login">การเข้าสู่ระบบ</a>
+        <a href="#moodle_overview">ภาพรวมหน้าจอ Moodle</a>
+        <div class="nav-section">บทที่ 1: สร้างรายวิชา</div>
+        <a href="#create_course">สร้างรายวิชาใหม่</a>
+        <a href="#course_settings">ตั้งค่ารายวิชา</a>
+        <a href="#add_content">เพิ่มเนื้อหา</a>
+        <a href="#activities">สร้างกิจกรรม</a>
+        <div class="nav-section">บทที่ 2: จัดการผู้เรียน</div>
+        <a href="#enrollment">ลงทะเบียนผู้เรียน</a>
+        <a href="#groups">จัดการ Groups</a>
+        <a href="#restrict">Restrict Access</a>
+        <div class="nav-section">บทที่ 3: คะแนนและติดตาม</div>
+        <a href="#gradebook">Gradebook / ให้คะแนน</a>
+        <a href="#completion">Completion Tracking</a>
+        <a href="#reports">รายงานผล</a>
+        <div class="nav-section">อื่นๆ</div>
+        <a href="#backup">Backup & Restore</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <!-- Intro -->
+      <section id="intro">
+        <h1>ยินดีต้อนรับเข้าสู่คู่มือการใช้งานระบบ Moodle สำหรับผู้จัดการหลักสูตร</h1>
+        <p>คู่มือฉบับนี้จัดทำขึ้นเพื่อแนะนำวิธีการใช้งานระบบ Moodle สำหรับผู้สร้างรายวิชา (Course Creator)
+          เพื่อให้สามารถสร้าง จัดการ และดูแลรายวิชาภายในระบบ</p>
+        <div class="step-text">เอกสารประกอบการสอน ตามลิงก์นี้<a href="https://172.17.100.55:8090/moodle/login/index.php"
+            target="_blank" style="color:#A21D21; font-weight:600;">เข้าสู่ระบบ moodle</a>
+        </div>
+      </section>
+
+      <!-- Login -->
+      <section id="login">
+        <h2>การเข้าสู่ระบบ (Login)</h2>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เปิดเบราว์เซอร์ (Chrome, Firefox, Edge) แล้วเข้าสู่ URL ของ Moodle ตามลิงก์นี้<a
+              href="https://172.17.100.55:8090/moodle/login/index.php" target="_blank"
+              style="color:#A21D21; font-weight:600;">เข้าสู่ระบบ moodle</a>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">กรอก <strong>Username</strong> และ <strong>Password</strong> ที่ได้รับจาก Administrator
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิกปุ่ม <strong>"Log in"</strong> เพื่อเข้าสู่ระบบ</div>
+        </div>
+
+        <div class="image-container">
+          <img src="img/1login.png" alt="Screenshot of Moodle login page">
+          <div class="image-caption">รูปที่ 1:หน้าล็อกอินของระบบ Moodle</div>
+        </div>
+      </section>
+
+      <!-- Moodle Overview -->
+      <section id="moodle_overview">
+        <h2>ภาพรวมหน้าจอ Moodle</h2>
+        <p>หลังจากเข้าสู่ระบบสำเร็จ ท่านจะเห็นเมนูหลักด้านบน (Navigation Bar) พร้อมหน้าจอต่างๆ ดังนี้:</p>
+        <h3>🔔 แถบด้านบนขวา</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ไอคอน</th>
+              <th>ชื่อ</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🔔</td>
+              <td><strong>Notifications</strong></td>
+              <td>การแจ้งเตือน — งานส่ง, Forum ตอบ, ข้อความจากระบบ</td>
+            </tr>
+            <tr>
+              <td>💬</td>
+              <td><strong>Messages</strong></td>
+              <td>ข้อความส่วนตัว — ส่งข้อความหา Student/Teacher ได้</td>
+            </tr>
+            <tr>
+              <td>👤</td>
+              <td><strong>User menu</strong></td>
+              <td>โปรไฟล์, Preferences, Grades, Calendar, Log out</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>📊 Dashboard — แดชบอร์ด</h3>
+        <p>หน้าสรุปภาพรวมส่วนตัวของท่าน:</p>
+        <ul>
+          <li><strong>Timeline:</strong> แสดง Deadline ที่กำลังจะมาถึง (Assignment , Quiz )</li>
+          <li><strong>Recently accessed courses:</strong> รายวิชาที่เข้าล่าสุด เข้าถึงได้เร็ว</li>
+          <li><strong>Calendar:</strong> ปฏิทินแสดงกำหนดการและเหตุการณ์ต่างๆ</li>
+        </ul>
+        <div class="image-container">
+          <img src="img/2.png" alt="Dashboard">
+          <div class="image-caption">รูปที่ 2: หน้า Dashboard แสดง ปฏิทิน และ Timeline</div>
+        </div>
+
+        <h3>🏠 Home — หน้าแรก</h3>
+        <p>หน้าแรกของ Moodle แสดงข้อมูลต้อนรับ, ประกาศ, และเนื้อหาที่กำหนดไว้ เช่น Banner รูปภาพ หรือข่าวสาร
+          เป็นจุดเริ่มต้นหลักของระบบ</p>
+        <ul>
+          <li>แสดง <strong>Banner</strong> หรือข้อมูลต้อนรับขององค์กร</li>
+          <li>สามารถเข้าถึงเมนูอื่นๆ ได้จาก Navigation Bar ด้านบน</li>
+          <li>แสดง <strong>Course overview</strong> หรือ <strong>Available courses</strong> ที่ถูกตั้งค่าไว้</li>
+        </ul>
+        <div class="image-container">
+          <img src="img/3.png" alt="Moodle Homepage">
+          <div class="image-caption">รูปที่ 3: หน้าจอหลักของ Moodle (Home)</div>
+        </div>
+        <h3>📁 Content bank</h3>
+        <p>คลังเก็บเนื้อหาที่สร้างไว้ เช่น H5P content สามารถนำไปใช้ซ้ำในหลายรายวิชาได้</p>
+        <ul>
+          <li>เข้าถึงได้จากแท็บ <strong>Content bank</strong> ในหน้า Home (ดูรูป)</li>
+          <li>สร้าง, แก้ไข, และจัดการ H5P activities</li>
+          <li>ใช้ร่วมกับ Activity H5P ในรายวิชา</li>
+        </ul>
+        <div class="image-container">
+          <img src="img/6.png" alt="Content bank">
+          <div class="image-caption">รูปที่ 4: หน้าจอ Content bank</div>
+        </div>
+
+
+        <h3>📚 My courses — รายวิชาของฉัน</h3>
+        <p>แสดงรายวิชาทั้งหมดที่ท่านมีส่วนเกี่ยวข้อง:</p>
+        <ul>
+          <li>แสดงเป็น <strong>Card view</strong> หรือ <strong>List view</strong> (สลับได้)</li>
+          <li>กรองตามสถานะ: <strong>All / In progress / Past / Starred</strong></li>
+          <li>ค้นหารายวิชาจากชื่อ</li>
+          <li>คลิกที่ชื่อรายวิชาเพื่อเข้าไปจัดการเนื้อหา</li>
+          <li>คลิกที่ create course เพื่อเข้าสู่หน้าการสร้างหลักสูตร</li>
+        </ul>
+        <div class="image-container">
+          <img src="img/4.png" alt="My courses">
+          <div class="image-caption">รูปที่ 5: หน้า My courses แสดงรายวิชาทั้งหมด</div>
+        </div>
+
+        <h3>⚙️ Site administration — การจัดการระบบ</h3>
+        <p>เมนูสำหรับ Admin และ Course Creator (บางส่วน):</p>
+        <table>
+          <thead>
+            <tr>
+              <th>เมนู</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Courses > Manage courses and categories</strong></td>
+              <td>สร้าง/จัดการรายวิชาและหมวดหมู่</td>
+              <td><span class="badge yes">✅ ใช้ได้</span></td>
+            </tr>
+            <tr>
+              <td><strong>Courses > Add a new course</strong></td>
+              <td>สร้างรายวิชาใหม่โดยตรง</td>
+              <td><span class="badge yes">✅ ใช้ได้</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="image-container">
+          <img src="img/5.png" alt="Site administration">
+          <div class="image-caption">รูปที่ 6: เมนู Site administration</div>
+        </div>
+
+
+
+
+      </section>
+
+      <!-- Create Course -->
+      <section id="create_course">
+        <h2>บทที่ 1: สร้างรายวิชาใหม่</h2>
+        <h3>ขั้นตอนการสร้างรายวิชา</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">ไปที่ <strong>Site administration > Courses > Manage courses and categories</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก Category ที่ต้องการ หรือสร้าง Category ใหม่</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Create new course"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">กรอกข้อมูลรายวิชา (ดูตารางด้านล่าง)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">คลิก <strong>"Save and display"</strong></div>
+        </div>
+        <h3>ข้อมูลที่ต้องกรอก</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>คำอธิบาย</th>
+              <th>ตัวอย่าง</th>
+              <th>บังคับ?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Course full name</td>
+              <td>ชื่อเต็มของรายวิชา</td>
+              <td>การเขียนโปรแกรมเบื้องต้น</td>
+              <td><span class="badge yes">บังคับ</span></td>
+            </tr>
+            <tr>
+              <td>Course short name</td>
+              <td>ชื่อย่อ (unique)</td>
+              <td>PROG101</td>
+              <td><span class="badge yes">บังคับ</span></td>
+            </tr>
+            <tr>
+              <td>Course category</td>
+              <td>หมวดหมู่</td>
+              <td>วิทยาการคอมพิวเตอร์</td>
+              <td><span class="badge yes">บังคับ</span></td>
+            </tr>
+            <tr>
+              <td>Start date</td>
+              <td>วันเริ่มรายวิชา</td>
+              <td>1 มีนาคม 2026</td>
+              <td><span class="badge yes">บังคับ</span></td>
+            </tr>
+            <tr>
+              <td>Course summary</td>
+              <td>คำอธิบายรายวิชา</td>
+              <td>รายวิชาสอนพื้นฐาน...</td>
+              <td>ไม่บังคับ</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="image-container">
+          <img src="img/7.png" alt="Screenshot of creating new course in Moodle">
+          <div class="image-caption">รูปที่ 7: หน้าจัดการหลักสูตร (Manage courses and categories)</div>
+        </div>
+        <div class="image-container">
+          <img src="img/8.png" alt="Screenshot of creating new course in Moodle">
+          <div class="image-caption">รูปที่ 8: สร้างหลักสูตร (create course)</div>
+        </div>
+      </section>
+
+      <!-- Course Settings -->
+      <section id="course_settings">
+        <h2>ตั้งค่ารายวิชา (Course Settings)</h2>
+        <h3>Course Format</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Topics</strong></td>
+              <td>แบ่งเนื้อหาเป็นหัวข้อ</td>
+              <td>เรียนตามหัวข้อ</td>
+            </tr>
+            <tr>
+              <td><strong>Weekly</strong></td>
+              <td>แบ่งเนื้อหาเป็นสัปดาห์</td>
+              <td>มีกำหนดเวลาชัดเจน</td>
+            </tr>
+            <tr>
+              <td><strong>Single activity</strong></td>
+              <td>Activity เดียว เช่น SCORM</td>
+              <td>สอบ / e-learning</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>วิธีเปลี่ยน Settings</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้าไปในรายวิชา > คลิก <strong>Settings</strong> (ไอคอนฟันเฟือง)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">แก้ไขค่าที่ต้องการ (Format, Visibility, Appearance)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Save and display"</strong></div>
+        </div>
+        <div class="info-box"><strong>💡 Tip:</strong> ซ่อนรายวิชา (Hide) ระหว่างเตรียมเนื้อหา แล้ว Show
+          เมื่อพร้อมเปิดให้ผู้เรียน</div>
+        <div class="image-container">
+          <img src="img/9.png" alt="Screenshot of course settings in Moodle">
+          <div class="image-caption">รูปที่ 9 สร้างหลักสูตร (create course)</div>
+        </div>
+      </section>
+
+      <!-- Add Content -->
+      <section id="add_content">
+        <h2>เพิ่มเนื้อหา (Resources)</h2>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้าไปในรายวิชา > คลิก <strong>"Turn editing on"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Add an activity or resource"</strong> ใน Section ที่ต้องการ</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">เลือกประเภท Resource > กรอกข้อมูล > <strong>"Save and return"</strong></div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Resource</th>
+              <th>คำอธิบาย</th>
+              <th>ใช้งาน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>File</strong></td>
+              <td>อัปโหลดไฟล์ PDF, Word, PPT</td>
+              <td>แจกเอกสาร</td>
+            </tr>
+            <tr>
+              <td><strong>Page</strong></td>
+              <td>สร้างหน้าเว็บในรายวิชา</td>
+              <td>เนื้อหาออนไลน์</td>
+            </tr>
+            <tr>
+              <td><strong>URL</strong></td>
+              <td>ลิงก์เว็บไซต์ภายนอก</td>
+              <td>วิดีโอ, แหล่งอ้างอิง</td>
+            </tr>
+            <tr>
+              <td><strong>Folder</strong></td>
+              <td>รวมไฟล์หลายไฟล์</td>
+              <td>จัดกลุ่มเอกสาร</td>
+            </tr>
+            <tr>
+              <td><strong>Book</strong></td>
+              <td>เนื้อหาแบบหนังสือหลายบท</td>
+              <td>เนื้อหายาว</td>
+            </tr>
+            <tr>
+              <td><strong>Label</strong></td>
+              <td>ข้อความแทรกในหน้า Course</td>
+              <td>คำอธิบาย, หัวข้อย่อย</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>💡 Tip:</strong> ใช้ Drag &amp; Drop ลากไฟล์จากคอมพิวเตอร์มาวางใน Section
+          ได้โดยตรง</div>
+        <div class="image-container">
+          <img src="img/10.png" alt="Screenshot of adding content in Moodle">
+          <div class="image-caption">รูปที่ 10: หน้าแสดงภาพรวมหลักสูตร</div>
+        </div>
+      </section>
+
+      <!-- Activities -->
+      <section id="activities">
+        <h2>สร้างกิจกรรม (Activities)</h2>
+        <p>Moodle มีกิจกรรมหลากหลายประเภทให้เลือกใช้ แบ่งตามวัตถุประสงค์ดังนี้:</p>
+        <div class="image-container">
+          <img src="img/11.png" alt="Screenshot of adding content in Moodle">
+          <div class="image-caption">รูปที่ 11: หน้าแสดงการสร้างเนื้อภายในหลักสูตร</div>
+        </div>
+        <h3>📝 กลุ่มงานมอบหมายและทดสอบ</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Assignment</strong></td>
+              <td>ให้ผู้เรียนส่งงาน (ไฟล์, ข้อความออนไลน์, วิดีโอ)</td>
+              <td>การบ้าน, รายงาน, โปรเจค, Portfolio</td>
+            </tr>
+            <tr>
+              <td><strong>Quiz</strong></td>
+              <td>สร้างแบบทดสอบอัตโนมัติจาก Question Bank</td>
+              <td>สอบ, แบบฝึกหัด, Pre/Post test, แบบประเมิน</td>
+            </tr>
+            <tr>
+              <td><strong>Workshop</strong></td>
+              <td>การประเมินโดยเพื่อน (Peer Assessment) พร้อม Rubric</td>
+              <td>ให้นักเรียนตรวจและให้คะแนนงานกันเอง</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>💬 กลุ่มสื่อสารและอภิปราย</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Forum</strong></td>
+              <td>กระดานสนทนาแบบ Thread (มีหลายรูปแบบ)</td>
+              <td>อภิปราย, ถาม-ตอบ, ประกาศ, แลกเปลี่ยนความคิด</td>
+            </tr>
+            <tr>
+              <td><strong>Chat</strong></td>
+              <td>ห้องสนทนาแบบ Real-time (ข้อความสั้น)</td>
+              <td>ถาม-ตอบสด, Office hours, พูดคุยกลุ่ม</td>
+            </tr>
+            <tr>
+              <td><strong>BigBlueButton</strong></td>
+              <td>ห้องเรียนออนไลน์ (Video conference) ใน Moodle</td>
+              <td>สอนสด, ประชุมกลุ่ม, บันทึกการบรรยาย</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>📖 กลุ่มเนื้อหาและบทเรียน</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Lesson</strong></td>
+              <td>บทเรียนแบบแยกเส้นทาง (Branching) ตอบคำถามก่อนไปขั้นถัดไป</td>
+              <td>เนื้อหาที่ต้องทำความเข้าใจก่อน, Self-paced learning</td>
+            </tr>
+            <tr>
+              <td><strong>SCORM package</strong></td>
+              <td>เนื้อหา e-learning มาตรฐาน SCORM/AICC</td>
+              <td>Import เนื้อหาจากซอฟต์แวร์ Authoring เช่น Articulate, iSpring</td>
+            </tr>
+            <tr>
+              <td><strong>H5P</strong></td>
+              <td>เนื้อหาแบบ Interactive (วิดีโอ, แบบฝึก, Timeline, Flashcard)</td>
+              <td>สื่อการสอนแบบโต้ตอบ, Interactive video</td>
+            </tr>
+            <tr>
+              <td><strong>External tool (LTI)</strong></td>
+              <td>เชื่อมต่อเครื่องมือภายนอกผ่านมาตรฐาน LTI</td>
+              <td>Turnitin, Padlet, Kahoot, เครื่องมือ Third-party</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>📊 กลุ่มรวบรวมข้อมูลและสำรวจ</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Choice</strong></td>
+              <td>โพลถามความคิดเห็น (เลือก 1 ตัวเลือก)</td>
+              <td>โหวต, สำรวจความเห็น, เลือกกลุ่ม, นับจำนวน</td>
+            </tr>
+            <tr>
+              <td><strong>Feedback</strong></td>
+              <td>แบบสอบถามเต็มรูปแบบ (ไม่มีคะแนน)</td>
+              <td>แบบประเมินรายวิชา, แบบสำรวจ, แบบสอบถามความพึงพอใจ</td>
+            </tr>
+            <tr>
+              <td><strong>Survey</strong></td>
+              <td>แบบสำรวจสำเร็จรูป (COLLES/ATTLS)</td>
+              <td>วิจัยทัศนคติผู้เรียน, ประเมินบรรยากาศการเรียน</td>
+            </tr>
+            <tr>
+              <td><strong>Database</strong></td>
+              <td>สร้างฐานข้อมูลร่วมกัน (กำหนด Fields เอง)</td>
+              <td>เก็บข้อมูลแบบมีโครงสร้าง, Portfolio, รวมทรัพยากร</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>📚 กลุ่มสร้างเนื้อหาร่วมกัน</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Glossary</strong></td>
+              <td>พจนานุกรมคำศัพท์ (ผู้เรียนเพิ่มคำได้)</td>
+              <td>รวมคำศัพท์ประจำวิชา, FAQ, คลังคำ</td>
+            </tr>
+            <tr>
+              <td><strong>Wiki</strong></td>
+              <td>สร้างเนื้อหาร่วมกันแบบ Wiki</td>
+              <td>โปรเจคกลุ่ม, สรุปเนื้อหาร่วม, เขียนร่วมกัน</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box"><strong>💡 วิธีเพิ่ม Activity:</strong> เปิด Editing > คลิก <strong>"Add an activity or
+            resource"</strong> ใน Section ที่ต้องการ > เลือกประเภท Activity > กรอกข้อมูล > Save</div>
+
+        <h3>📝 ช่องกรอกข้อมูลที่ทุก Activity ต้องมี (General)</h3>
+        <p>เมื่อสร้าง Activity ทุกประเภท Moodle จะแสดงหมวด <strong>General</strong> เป็นอันดับแรก ต้องกรอกข้อมูลดังนี้:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>ช่อง</th>
+              <th>คำอธิบาย</th>
+              <th>บังคับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Activity name</strong></td>
+              <td>ชื่อที่แสดงในหน้ารายวิชา เช่น "แบบทดสอบบทที่ 1" หรือ "ส่งงาน Assignment 1"</td>
+              <td><span class="badge yes">✅ ต้องกรอก</span></td>
+            </tr>
+            <tr>
+              <td><strong>Description</strong></td>
+              <td>คำอธิบายรายละเอียด คำชี้แจง หรือโจทย์ (รองรับรูปภาพ, วิดีโอ, ลิงก์)</td>
+              <td>แนะนำ</td>
+            </tr>
+            <tr>
+              <td><strong>Display description on course page</strong></td>
+              <td>แสดง Description ในหน้ารายวิชาโดยไม่ต้องคลิกเข้าไป</td>
+              <td>ตามต้องการ</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box blue"><strong>📘 หมายเหตุ:</strong> ทุก Activity ยังมีหมวดเพิ่มเติมที่เหมือนกัน ดังนี้:
+          <ul style="margin-top:8px;">
+            <li><strong>Common module settings:</strong> กำหนด Group mode (No groups / Separate / Visible) และ Grouping
+            </li>
+            <li><strong>Restrict access:</strong> เพิ่มเงื่อนไขการเข้าถึง (ดูรายละเอียดในหัวข้อ Restrict Access)</li>
+            <li><strong>Activity completion:</strong> ตั้งเงื่อนไขการสำเร็จ (ดูรายละเอียดในหัวข้อ Completion Tracking)
+            </li>
+            <li><strong>Tags:</strong> เพิ่มแท็กเพื่อค้นหาง่าย</li>
+          </ul>
+        </div>
+
+        <!-- Assignment Deep Dive -->
+        <h3>📝การสร้าง Assignment </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เปิด Editing > คลิก <strong>"Add an activity or resource"</strong> > เลือก
+            <strong>Assignment</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">กรอกชื่อในช่อง <strong>"Assignment name"</strong> (เช่น "ส่งงานรายงานบทที่ 1") และเขียน
+            <strong>Description</strong> (โจทย์งาน, คำชี้แจง, เกณฑ์การให้คะแนน)
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ตั้งค่าตามตารางด้านล่าง</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">คลิก <strong>"Save and return to course"</strong></div>
+        </div>
+        <h4>ตั้งค่า Assignment</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>หมวด</th>
+              <th>Setting</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>General</strong></td>
+              <td>Assignment name</td>
+              <td>ชื่องาน เช่น "ส่งรายงานบทที่ 1" (✅ บังคับ)</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>โจทย์งาน, คำชี้แจง, เกณฑ์การให้คะแนน</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Availability</strong></td>
+              <td>Allow submissions from</td>
+              <td>วันเริ่มส่งงานได้</td>
+            </tr>
+            <tr>
+              <td>Due date</td>
+              <td>กำหนดส่ง (แสดงใน Calendar)</td>
+            </tr>
+            <tr>
+              <td>Cut-off date</td>
+              <td>วันสุดท้ายที่ส่งได้ หลัง Due date ส่งสายได้ถึงวันนี้</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>Submission types</strong></td>
+              <td>File submissions</td>
+              <td>อัปโหลดไฟล์ (กำหนดจำนวนและขนาดสูงสุดได้)</td>
+            </tr>
+            <tr>
+              <td>Online text</td>
+              <td>พิมพ์ตอบในช่องข้อความ</td>
+            </tr>
+            <tr>
+              <td>Max files</td>
+              <td>จำนวนไฟล์สูงสุดต่อ 1 submission (1-20)</td>
+            </tr>
+            <tr>
+              <td>Max submission size</td>
+              <td>ขนาดไฟล์สูงสุด (เช่น 50MB, 100MB)</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Feedback types</strong></td>
+              <td>Feedback comments</td>
+              <td>เขียน comment ให้ผู้เรียน</td>
+            </tr>
+            <tr>
+              <td>Feedback files</td>
+              <td>อัปโหลดไฟล์ feedback (เช่น ไฟล์ที่ markup แล้ว)</td>
+            </tr>
+            <tr>
+              <td>Offline grading worksheet</td>
+              <td>ดาวน์โหลด worksheet ตรวจ offline แล้ว import กลับ</td>
+            </tr>
+            <tr>
+              <td rowspan="2"><strong>Submission settings</strong></td>
+              <td>Require students click submit</td>
+              <td>ผู้เรียนต้องกด Submit เอง (ไม่ใช่ auto-submit)</td>
+            </tr>
+            <tr>
+              <td>Attempts reopened</td>
+              <td>อนุญาตให้ส่งใหม่ (Never / Manually / Until pass)</td>
+            </tr>
+            <tr>
+              <td><strong>Grade</strong></td>
+              <td>Maximum grade</td>
+              <td>คะแนนเต็ม (เช่น 100), เลือก Scale หรือ Point</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="image-container">
+          <img src="img/12.png" alt="Assignment Settings">
+          <div class="image-caption">รูปที่ 12: หน้าจอตั้งค่า Assignment</div>
+        </div>
+        <div class="image-container">
+          <img src="img/13.png" alt="Assignment Settings">
+          <div class="image-caption">รูปที่ 13: หน้าจอตั้งค่า Assignment</div>
+        </div>
+                <div class="image-container">
+          <img src="img/14.png" alt="Assignment Settings">
+          <div class="image-caption">รูปที่ 14: หน้าจอแสดง Assignment</div>
+        </div>
+        <div class="info-box"><strong>💡 Tip:</strong> ใช้ Rubric หรือ Marking guide เพื่อให้คะแนนเชิงเกณฑ์ — ไปที่
+          Assignment > Advanced grading > Define rubric</div>
+
+        <!-- Quiz Deep Dive -->
+        <h3>📝 การสร้าง Quiz </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เพิ่ม <strong>Quiz</strong> > กรอกชื่อในช่อง <strong>"Quiz name"</strong> (เช่น
+            "แบบทดสอบบทที่ 1") และเขียน <strong>Description</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">ตั้งค่าตามตารางด้านล่าง > คลิก <strong>"Save and display"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Edit quiz"</strong> > เพิ่มคำถาม</div>
+        </div>
+        <h4>ตั้งค่า Quiz</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>หมวด</th>
+              <th>Setting</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>General</strong></td>
+              <td>Quiz name</td>
+              <td>ชื่อแบบทดสอบ เช่น "สอบกลางภาค" (✅ บังคับ)</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>คำชี้แจงการทำ Quiz, กฎข้อบังคับ</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Timing</strong></td>
+              <td>Open / Close the quiz</td>
+              <td>วันเริ่ม-สิ้นสุดการทำ Quiz</td>
+            </tr>
+            <tr>
+              <td>Time limit</td>
+              <td>เวลาจำกัด (เช่น 30 นาที, 1 ชั่วโมง)</td>
+            </tr>
+            <tr>
+              <td>When time expires</td>
+              <td>เมื่อหมดเวลา: ส่งอัตโนมัติ / ให้เวลาเพิ่ม / ยกเลิก</td>
+            </tr>
+            <tr>
+              <td rowspan="2"><strong>Grade</strong></td>
+              <td>Attempts allowed</td>
+              <td>จำนวนครั้งที่ทำได้ (1 ครั้ง / ไม่จำกัด)</td>
+            </tr>
+            <tr>
+              <td>Grading method</td>
+              <td>Highest / Average / First / Last attempt</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Layout</strong></td>
+              <td>New page</td>
+              <td>แสดงกี่ข้อต่อหน้า</td>
+            </tr>
+            <tr>
+              <td>Navigation method</td>
+              <td>Free (ย้อนกลับได้) / Sequential (ข้อเดียวทีละข้อ)</td>
+            </tr>
+            <tr>
+              <td>Shuffle questions</td>
+              <td>สลับลำดับข้อสอบ</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>Question behaviour</strong></td>
+              <td>Shuffle within questions</td>
+              <td>สลับตัวเลือกในแต่ละข้อ</td>
+            </tr>
+            <tr>
+              <td>How questions behave</td>
+              <td>Deferred feedback / Interactive / Immediate feedback</td>
+            </tr>
+            <tr>
+              <td>Each attempt builds on last</td>
+              <td>Attempt ใหม่เริ่มจากคำตอบเดิม</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>Review options</strong></td>
+              <td>During the attempt</td>
+              <td>เห็นอะไรระหว่างทำ</td>
+            </tr>
+            <tr>
+              <td>Immediately after</td>
+              <td>เห็นอะไรหลังส่งทันที</td>
+            </tr>
+            <tr>
+              <td>Later, while still open</td>
+              <td>เห็นอะไรระหว่าง Quiz ยังเปิด</td>
+            </tr>
+            <tr>
+              <td>After the quiz is closed</td>
+              <td>เห็นอะไรหลังปิด Quiz</td>
+            </tr>
+            <tr>
+              <td><strong>Extra restrictions</strong></td>
+              <td>Require password</td>
+              <td>ต้องกรอกรหัสก่อนเข้าทำ Quiz</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="image-container">
+          <img src="images/quiz-settings.png" alt="Quiz Settings">
+          <div class="image-caption">รูปที่ 13: หน้าจอตั้งค่า Quiz</div>
+        </div>
+        <h4>Question Bank — คลังคำถาม</h4>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">ไปที่ <strong>Question bank</strong> (ในเมนูรายวิชา)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">สร้าง <strong>Categories</strong> เพื่อจัดกลุ่มคำถาม (เช่น "บทที่ 1", "สอบกลางภาค")
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Create a new question"</strong> > เลือกประเภท > กรอกข้อมูล</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">ใน Quiz > <strong>"Add" > "from question bank"</strong> หรือ <strong>"a random
+              question"</strong></div>
+        </div>
+        <h4>ประเภทคำถามทั้งหมด</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>ประเภท</th>
+              <th>คำอธิบาย</th>
+              <th>ตรวจอัตโนมัติ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Multiple choice</td>
+              <td>เลือกตอบ (1 หรือหลายข้อ)</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>True/False</td>
+              <td>ถูก/ผิด</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Short answer</td>
+              <td>ตอบสั้น (ตรวจตาม keyword)</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Numerical</td>
+              <td>ตอบเป็นตัวเลข (กำหนดค่า tolerance ได้)</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Matching</td>
+              <td>จับคู่ซ้าย-ขวา</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Drag and drop</td>
+              <td>ลากวางลงช่องที่ถูกต้อง</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Select missing words</td>
+              <td>เลือกเติมคำในช่องว่าง</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Calculated</td>
+              <td>คำนวณจากสูตร (ค่าตัวแปรสุ่ม)</td>
+              <td><span class="badge yes">✅</span></td>
+            </tr>
+            <tr>
+              <td>Essay</td>
+              <td>เขียนตอบยาว (อัปโหลดไฟล์ได้)</td>
+              <td><span class="badge no">ตรวจเอง</span></td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>ข้อความอธิบาย (ไม่มีคำถาม) ใช้แทรกคำชี้แจง</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>💡 Tip:</strong> ใช้ Random question จาก Category
+          เพื่อสุ่มข้อสอบให้แต่ละคนได้คนละชุด — ลดการทุจริต</div>
+        <div class="image-container">
+          <img src="images/quiz-question-bank.png" alt="Question Bank">
+          <div class="image-caption">รูปที่: หน้าจอ Question Bank</div>
+        </div>
+
+        <!-- Forum Deep Dive -->
+        <h3>💬 Forum </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เพิ่ม <strong>Forum</strong> > กรอกชื่อในช่อง <strong>"Forum name"</strong> (เช่น
+            "กระดานสนทนาบทที่ 1") และเขียน <strong>Description</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก <strong>Forum type</strong> (ดูตารางด้านล่าง) > ตั้งค่า > <strong>"Save"</strong>
+          </div>
+        </div>
+        <h4>ประเภท Forum</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>ประเภท</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Standard forum</strong></td>
+              <td>ทุกคนสร้าง topic ใหม่ได้</td>
+              <td>อภิปรายทั่วไป</td>
+            </tr>
+            <tr>
+              <td><strong>Single simple discussion</strong></td>
+              <td>มี topic เดียว ทุกคนตอบใน thread เดียว</td>
+              <td>คำถามเฉพาะ 1 หัวข้อ</td>
+            </tr>
+            <tr>
+              <td><strong>Each person posts one</strong></td>
+              <td>แต่ละคนสร้าง topic ได้ 1 ครั้ง</td>
+              <td>ให้ทุกคนนำเสนอความเห็น</td>
+            </tr>
+            <tr>
+              <td><strong>Q and A forum</strong></td>
+              <td>ต้องตอบก่อนจึงเห็นคำตอบคนอื่น</td>
+              <td>ป้องกันการลอกคำตอบ</td>
+            </tr>
+            <tr>
+              <td><strong>Standard blog-like</strong></td>
+              <td>แสดงแบบ Blog</td>
+              <td>เขียน Blog ส่วนตัว</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4>ตั้งค่า Forum</h4>
+        <ul>
+          <li><strong>Subscription mode:</strong> Optional / Forced / Auto / Disabled</li>
+          <li><strong>Read tracking:</strong> เปิดให้ผู้เรียนเห็นว่าโพสต์ไหนยังไม่ได้อ่าน</li>
+          <li><strong>Post threshold:</strong> กำหนดจำนวนโพสต์ขั้นต่ำ / สูงสุด</li>
+          <li><strong>Whole forum grading:</strong> ให้คะแนน Forum ทั้งอัน (ดูจากจำนวน/คุณภาพโพสต์)</li>
+          <li><strong>Rating:</strong> ให้คะแนนแต่ละโพสต์ (Teacher หรือ Student ให้ Rating ได้)</li>
+        </ul>
+        <div class="image-container">
+          <img src="images/forum-settings.png" alt="Forum Settings">
+          <div class="image-caption">รูปที่: หน้าจอตั้งค่า Forum</div>
+        </div>
+
+        <!-- H5P Deep Dive -->
+        <h3>🎮 H5P </h3>
+        <p>H5P (HTML5 Package) สร้างเนื้อหาแบบ Interactive ได้หลายรูปแบบ:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Content Type</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Interactive Video</strong></td>
+              <td>วิดีโอที่แทรกคำถาม, ลิงก์, ป้อนข้อมูลระหว่างดู</td>
+            </tr>
+            <tr>
+              <td><strong>Course Presentation</strong></td>
+              <td>สไลด์แบบ Interactive พร้อมคำถามในแต่ละหน้า</td>
+            </tr>
+            <tr>
+              <td><strong>Branching Scenario</strong></td>
+              <td>เนื้อหาแบบเลือกเส้นทาง (เหมือน Choose Your Own Adventure)</td>
+            </tr>
+            <tr>
+              <td><strong>Flashcards</strong></td>
+              <td>บัตรคำถาม-คำตอบ สำหรับท่องจำ</td>
+            </tr>
+            <tr>
+              <td><strong>Timeline</strong></td>
+              <td>แสดงเหตุการณ์ตามลำดับเวลา</td>
+            </tr>
+            <tr>
+              <td><strong>Drag and Drop</strong></td>
+              <td>ลากวางรูปภาพ/ข้อความไปยังตำแหน่งที่ถูกต้อง</td>
+            </tr>
+            <tr>
+              <td><strong>Fill in the Blanks</strong></td>
+              <td>เติมคำในช่องว่าง</td>
+            </tr>
+            <tr>
+              <td><strong>Column</strong></td>
+              <td>รวม H5P หลายตัวเข้าด้วยกันในหน้าเดียว</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">สร้าง H5P content ใน <strong>Content bank</strong> (เมนูรายวิชา) หรือ h5p.org</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เพิ่ม Activity <strong>"H5P"</strong> > กรอกชื่อในช่อง <strong>"Name"</strong> (เช่น
+            "แบบฝึกหัด Interactive") และเขียน <strong>Description</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">เลือกไฟล์ .h5p จาก Content bank > ตั้ง Grade (ถ้าต้องการเก็บคะแนน) >
+            <strong>"Save"</strong>
+          </div>
+        </div>
+        <div class="image-container">
+          <img src="images/h5p-content-types.png" alt="H5P Content Types">
+          <div class="image-caption">รูปที่: ตัวอย่าง H5P Content Types</div>
+        </div>
+
+        <!-- SCORM Deep Dive -->
+        <h3>📦 SCORM </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เพิ่ม Activity <strong>"SCORM package"</strong> > กรอกชื่อในช่อง
+            <strong>"Name"</strong>
+            (เช่น "บทเรียน Online บทที่ 1") และเขียน <strong>Description</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">อัปโหลดไฟล์ .zip (SCORM package)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ตั้งค่า:</div>
+        </div>
+        <ul>
+          <li><strong>Number of attempts:</strong> จำนวนครั้งที่เข้าเรียนได้</li>
+          <li><strong>Grading method:</strong> Highest / Average / First / Last / Sum</li>
+          <li><strong>Force new attempt:</strong> บังคับเริ่มใหม่ทุกครั้ง</li>
+          <li><strong>Display package:</strong> แสดงใน Current window / New window / Popup</li>
+          <li><strong>Auto-continue:</strong> เปิดบทถัดไปอัตโนมัติ</li>
+        </ul>
+        <div class="info-box blue"><strong>📘 หมายเหตุ:</strong> SCORM package สร้างจากซอฟต์แวร์ Authoring เช่น
+          Articulate Storyline, Adobe Captivate, iSpring Suite แล้ว Export เป็น SCORM 1.2 หรือ 2004</div>
+        <div class="image-container">
+          <img src="images/scorm-upload.png" alt="SCORM Upload">
+          <div class="image-caption">รูปที่: หน้าจออัปโหลด SCORM Package</div>
+        </div>
+
+        <!-- Feedback Deep Dive -->
+        <h3>📊 Feedback </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เพิ่ม Activity <strong>"Feedback"</strong> > กรอกชื่อในช่อง <strong>"Name"</strong>
+            (เช่น
+            "แบบประเมินความพึงพอใจ") และเขียน <strong>Description</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Save and display"</strong> > แล้วเพิ่มคำถาม (ดูประเภทด้านล่าง)</div>
+        </div>
+        <p>สร้างแบบสอบถาม/แบบประเมินที่ <strong>ไม่มีคะแนน</strong> (ต่างจาก Quiz)</p>
+        <h4>ประเภทคำถามใน Feedback</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>ประเภท</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Multiple choice</strong></td>
+              <td>เลือกตอบ (1 หรือหลายข้อ) แสดงเป็น Radio / Checkbox / Dropdown</td>
+            </tr>
+            <tr>
+              <td><strong>Multiple choice (rated)</strong></td>
+              <td>เลือกตอบพร้อมค่าคะแนน (สำหรับวิเคราะห์)</td>
+            </tr>
+            <tr>
+              <td><strong>Short text answer</strong></td>
+              <td>ตอบข้อความสั้น</td>
+            </tr>
+            <tr>
+              <td><strong>Longer text answer</strong></td>
+              <td>ตอบข้อความยาว (Textarea)</td>
+            </tr>
+            <tr>
+              <td><strong>Numeric answer</strong></td>
+              <td>ตอบเป็นตัวเลข</td>
+            </tr>
+            <tr>
+              <td><strong>Information</strong></td>
+              <td>แสดง Label หรือ Page break</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul>
+          <li><strong>Anonymous:</strong> ตั้งให้ตอบแบบไม่ระบุตัวตน</li>
+          <li><strong>Multiple submissions:</strong> อนุญาตให้ตอบหลายครั้ง</li>
+          <li><strong>Analysis:</strong> ดูผลรวมแบบกราฟและตาราง</li>
+        </ul>
+        <div class="image-container">
+          <img src="images/feedback-form.png" alt="Feedback Form">
+          <div class="image-caption">รูปที่: หน้าจอสร้างแบบสอบถาม Feedback</div>
+        </div>
+
+        <!-- Workshop Deep Dive -->
+        <h3>🔄 Workshop </h3>
+        <p>Workshop มี 4 ขั้นตอน (Phases):</p>
+        <div class="flow">
+          <div class="flow-step">
+            <h4>1. Setup</h4>
+            <p>ตั้งค่าและ Rubric</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <h4>2. Submission</h4>
+            <p>ผู้เรียนส่งงาน</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <h4>3. Assessment</h4>
+            <p>ผู้เรียนตรวจงานกัน</p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <h4>4. Grading</h4>
+            <p>คำนวณคะแนนรวม</p>
+          </div>
+        </div>
+        <ul>
+          <li><strong>Grading strategy:</strong> Accumulative / Comments / Rubric / Number of errors</li>
+          <li><strong>Number of reviews:</strong> กำหนดจำนวนงานที่แต่ละคนต้องตรวจ (เช่น 3 ชิ้น)</li>
+          <li><strong>Submission grade + Assessment grade:</strong> ได้คะแนนทั้งจากงานที่ส่ง และ คุณภาพการตรวจ</li>
+        </ul>
+        <div class="image-container">
+          <img src="images/workshop-phases.png" alt="Workshop Phases">
+          <div class="image-caption">รูปที่: ขั้นตอนการทำงาน Workshop</div>
+        </div>
+
+        <!-- Choice Deep Dive -->
+        <h3>📋 Choice </h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เพิ่ม Activity <strong>"Choice"</strong> > กรอกคำถาม</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เพิ่มตัวเลือก (Choice 1, 2, 3...) > กำหนด Limit (จำกัดจำนวนต่อตัวเลือก)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ตั้ง: Allow choice update / Show results / Privacy</div>
+        </div>
+        <div class="info-box"><strong>💡 ใช้ Choice สำหรับ:</strong> โหวตหัวข้อนำเสนอ, เลือกกลุ่ม/ช่องเวลา,
+          สำรวจความเห็นก่อนเริ่มบทเรียน</div>
+        <div class="image-container">
+          <img src="images/choice-activity.png" alt="Choice Activity">
+          <div class="image-caption">รูปที่: หน้าจอ Choice Activity</div>
+        </div>
+      </section>
+
+      <!-- Enrollment -->
+      <section id="enrollment">
+        <h2>บทที่ 2: ลงทะเบียนผู้เรียน (Enrollment)</h2>
+        <p>หลังจากสร้างรายวิชาแล้ว ขั้นตอนต่อไปคือการเพิ่มผู้เรียนเข้ามาในรายวิชา Moodle รองรับหลายวิธีดังนี้:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>คำอธิบาย</th>
+              <th>เหมาะกับ</th>
+              <th>ตั้งค่าที่</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Manual</strong></td>
+              <td>เพิ่มผู้เรียนด้วยมือทีละคน</td>
+              <td>กลุ่มเล็ก (1-30 คน)</td>
+              <td>Participants > Enrol users</td>
+            </tr>
+            <tr>
+              <td><strong>Self enrolment</strong></td>
+              <td>ผู้เรียนสมัครเอง (ใส่รหัสลงทะเบียน)</td>
+              <td>เปิดให้ลงทะเบียนเอง</td>
+              <td>Enrolment methods > Self enrolment</td>
+            </tr>
+            <tr>
+              <td><strong>Guest</strong></td>
+              <td>เข้าดูเนื้อหาได้โดยไม่ต้อง Enrol</td>
+              <td>Preview / เนื้อหาเปิดสาธารณะ</td>
+              <td>Enrolment methods > Guest access</td>
+            </tr>
+            <tr>
+              <td><strong>Cohort sync</strong></td>
+              <td>ลงทะเบียนอัตโนมัติตามกลุ่ม Cohort</td>
+              <td>องค์กรขนาดใหญ่ ลงทะเบียนทีเดียว</td>
+              <td>Enrolment methods > Cohort sync</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Manual Enrolment — เพิ่มผู้เรียนด้วยมือ</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้ารายวิชา > คลิก <strong>Participants</strong> ในเมนูด้านซ้าย</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Enrol users"</strong> > พิมพ์ชื่อหรืออีเมลผู้ใช้เพื่อค้นหา</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">เลือก <strong>Role</strong> ที่ต้องการ (ดูตารางด้านล่าง) > คลิก <strong>"Enrol
+              users"</strong></div>
+        </div>
+        <h4>Roles ที่กำหนดได้ในรายวิชา</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>สิทธิ์</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Student</strong></td>
+              <td>เข้าเรียน, ส่งงาน, ทำ Quiz, ดูคะแนนตัวเอง</td>
+            </tr>
+            <tr>
+              <td><strong>Non-editing teacher</strong></td>
+              <td>ดูเนื้อหา, ตรวจงาน, ให้คะแนน (แก้ไขเนื้อหาไม่ได้)</td>
+            </tr>
+            <tr>
+              <td><strong>Teacher (Editing)</strong></td>
+              <td>แก้ไขเนื้อหา, เพิ่ม Activity, จัดการทุกอย่างในรายวิชา</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Self Enrolment — ให้ผู้เรียนลงทะเบียนเอง</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้ารายวิชา > <strong>Participants</strong> > ไอคอนฟันเฟือง > <strong>Enrolment
+              methods</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เปิด <strong>Self enrolment</strong> (ไอคอนตา) > คลิกไอคอนฟันเฟืองเพื่อตั้งค่า</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ตั้งค่า:</div>
+        </div>
+        <ul>
+          <li><strong>Enrolment key:</strong> รหัสลงทะเบียน (แจกให้ผู้เรียนเท่านั้น)</li>
+          <li><strong>Max enrolled users:</strong> จำกัดจำนวนผู้เรียน</li>
+          <li><strong>Enrolment duration:</strong> ระยะเวลาที่เข้าเรียนได้ (เช่น 180 วัน)</li>
+          <li><strong>Start/End date:</strong> ช่วงเวลาที่เปิดให้ลงทะเบียน</li>
+        </ul>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">คลิก <strong>"Save changes"</strong></div>
+        </div>
+        <div class="info-box"><strong>💡 Tip:</strong> ใช้ Self enrolment + Enrolment key เพื่อควบคุมว่าใครลงทะเบียนได้
+          — แจกรหัสให้เฉพาะกลุ่มที่ต้องการ</div>
+        <div class="image-container">
+          <img src="img/13.png" alt="Enrollment methods">
+          <div class="image-caption">รูปที่ 13: หน้าจอ Enrolment methods</div>
+        </div>
+      </section>
+
+      <!-- Groups -->
+      <section id="groups">
+        <h2>จัดการ Groups</h2>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">ไปที่ <strong>Participants</strong> > ไอคอนฟันเฟือง > <strong>Groups</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Create group"</strong> > ตั้งชื่อ Group</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Add/remove users"</strong> เพื่อเพิ่มสมาชิก</div>
+        </div>
+        <h3>Groups Mode</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Mode</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>No groups</strong></td>
+              <td>ไม่แยก Group — ทุกคนเห็นเหมือนกัน</td>
+            </tr>
+            <tr>
+              <td><strong>Separate groups</strong></td>
+              <td>แต่ละ Group เห็นเฉพาะข้อมูลของ Group ตัวเอง</td>
+            </tr>
+            <tr>
+              <td><strong>Visible groups</strong></td>
+              <td>เห็นทุก Group แต่ลงข้อมูลได้เฉพาะ Group ตัวเอง</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>💡 ประโยชน์:</strong> แยก Forum / Assignment / Quiz ตาม Group, ดูคะแนนแยก Group,
+          จำกัดการเข้าถึง Activity ตาม Group</div>
+        <h3>Groupings — จัดกลุ่มของกลุ่ม</h3>
+        <p>Grouping คือการรวมหลาย Group เข้าด้วยกัน เพื่อกำหนด Activity ให้ Grouping เฉพาะ:</p>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">ไปที่ <strong>Participants > Groupings</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Create grouping"</strong> > ตั้งชื่อ > เพิ่ม Groups เข้า Grouping</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ใน Activity settings > Common module settings > เลือก <strong>Grouping</strong>
+            ที่ต้องการ</div>
+        </div>
+        <div class="image-container">
+          <img src="img/14.png" alt="Groups management">
+          <div class="image-caption">รูปที่ 14: หน้าจอจัดการ Groups</div>
+        </div>
+      </section>
+
+      <!-- Restrict Access -->
+      <section id="restrict">
+        <h2>Restrict Access — การจำกัดการเข้าถึง</h2>
+        <p>กำหนดเงื่อนไขว่าผู้เรียนต้องทำอะไรก่อนจึงจะเข้าถึง Activity หรือ Section ได้</p>
+        <h3>ประเภท Conditions</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Condition</th>
+              <th>คำอธิบาย</th>
+              <th>ตัวอย่าง</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Activity completion</strong></td>
+              <td>ต้องทำ Activity อื่นเสร็จก่อน</td>
+              <td>ต้องทำ Quiz 1 ก่อนเข้า Quiz 2</td>
+            </tr>
+            <tr>
+              <td><strong>Date</strong></td>
+              <td>เปิดให้เข้าถึงตามวันที่กำหนด</td>
+              <td>เปิดใน Week 3 เป็นต้นไป</td>
+            </tr>
+            <tr>
+              <td><strong>Grade</strong></td>
+              <td>ต้องได้คะแนนขั้นต่ำจาก Activity อื่น</td>
+              <td>ต้องได้ Quiz 1 ≥ 60%</td>
+            </tr>
+            <tr>
+              <td><strong>Group</strong></td>
+              <td>จำกัดเฉพาะ Group ที่กำหนด</td>
+              <td>เฉพาะ Group A เท่านั้น</td>
+            </tr>
+            <tr>
+              <td><strong>User profile</strong></td>
+              <td>ตามข้อมูลโปรไฟล์ผู้ใช้</td>
+              <td>เฉพาะ Department = Engineering</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>วิธีตั้ง Restrict Access</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เปิด Editing mode > คลิก Edit ที่ Activity > <strong>Edit settings</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลื่อนไปที่ส่วน <strong>"Restrict access"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Add restriction..."</strong> > เลือกประเภท condition</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">ตั้งค่าเงื่อนไข > เลือก <strong>"must"</strong> หรือ <strong>"must not"</strong> match
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">คลิก <strong>"Save and return to course"</strong></div>
+        </div>
+        <div class="info-box blue"><strong>📘 ตัวอย่างการใช้งาน:</strong> ตั้งให้ผู้เรียนต้องดู Lecture Video
+          (completion) ก่อน จึงจะทำ Quiz ได้ — ช่วยบังคับลำดับการเรียน</div>
+        <h3>ตัวอย่างการรวม Conditions</h3>
+        <div class="info-box green"><strong>✅ ตัวอย่าง: สร้างเส้นทางการเรียนบังคับ</strong>
+          <ul style="margin-top:8px;">
+            <li>บทที่ 1: เปิดให้ทุกคนเข้า</li>
+            <li>Quiz บทที่ 1: ต้องดูเนื้อหาบทที่ 1 ก่อน (Activity completion)</li>
+            <li>บทที่ 2: ต้องได้ Quiz บทที่ 1 ≥ 60% (Grade condition)</li>
+            <li>Final Exam: ต้องทำ Quiz ทุกบทเสร็จ (หลาย Activity completion)</li>
+          </ul>
+        </div>
+        <div class="image-container">
+          <img src="img/15.png" alt="Restrict access settings">
+          <div class="image-caption">รูปที่ 15: หน้าจอตั้งค่า Restrict access</div>
+        </div>
+      </section>
+
+      <!-- Gradebook -->
+      <section id="gradebook">
+        <h2>บทที่ 3: Gradebook — การจัดการคะแนน</h2>
+        <p>Gradebook เป็นระบบจัดการคะแนนกลางของ Moodle ทุก Activity ที่มีคะแนนจะส่งคะแนนมาที่นี่อัตโนมัติ</p>
+        <h3>การเข้าถึง Gradebook</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้าไปในรายวิชา > คลิก <strong>Grades</strong> ในเมนูด้านซ้าย</div>
+        </div>
+        <h3>Gradebook Views</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>View</th>
+              <th>คำอธิบาย</th>
+              <th>ใช้ทำอะไร</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Grader report</strong></td>
+              <td>ตารางคะแนนทุกคน (แก้ไขได้)</td>
+              <td>ดูภาพรวม, ให้คะแนนด้วย Quick grading</td>
+            </tr>
+            <tr>
+              <td><strong>User report</strong></td>
+              <td>คะแนนรายคน</td>
+              <td>ดูคะแนนเฉพาะผู้เรียน 1 คน</td>
+            </tr>
+            <tr>
+              <td><strong>Grade history</strong></td>
+              <td>ประวัติการเปลี่ยนแปลงคะแนน</td>
+              <td>ตรวจสอบว่าใครแก้คะแนนเมื่อไร</td>
+            </tr>
+            <tr>
+              <td><strong>Gradebook setup</strong></td>
+              <td>โครงสร้างหมวดคะแนนและน้ำหนัก</td>
+              <td>สร้าง Category, ตั้ง Weight, Aggregation</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>การให้คะแนน Assignment</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้า Assignment > คลิก <strong>"View all submissions"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">คลิก <strong>"Grade"</strong> > ดูงาน > ให้คะแนน > เขียน Feedback</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Save changes"</strong></div>
+        </div>
+        <h3>Grade Categories &amp; Weights</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Grades > Setup > Gradebook setup</strong> > คลิก <strong>"Add
+              category"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">ตั้งชื่อหมวด (เช่น การบ้าน, สอบกลางภาค) > ลาก Activity เข้าหมวด</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ตั้ง Aggregation: <strong>Weighted mean of grades</strong> > กำหนด Weight</div>
+        </div>
+        <h4>ตัวอย่างสัดส่วนคะแนน</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>หมวด</th>
+              <th>น้ำหนัก</th>
+              <th>Activities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>การบ้าน</td>
+              <td>20%</td>
+              <td>Assignment 1-5</td>
+            </tr>
+            <tr>
+              <td>แบบฝึกหัด</td>
+              <td>10%</td>
+              <td>Quiz 1-4</td>
+            </tr>
+            <tr>
+              <td>สอบกลางภาค</td>
+              <td>30%</td>
+              <td>Midterm Quiz</td>
+            </tr>
+            <tr>
+              <td>สอบปลายภาค</td>
+              <td>40%</td>
+              <td>Final Quiz</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Grade Letters</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>เกรด</th>
+              <th>ต่ำสุด (%)</th>
+              <th>สูงสุด (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A</td>
+              <td>80</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>B+</td>
+              <td>75</td>
+              <td>79.99</td>
+            </tr>
+            <tr>
+              <td>B</td>
+              <td>70</td>
+              <td>74.99</td>
+            </tr>
+            <tr>
+              <td>C+</td>
+              <td>65</td>
+              <td>69.99</td>
+            </tr>
+            <tr>
+              <td>C</td>
+              <td>60</td>
+              <td>64.99</td>
+            </tr>
+            <tr>
+              <td>D+</td>
+              <td>55</td>
+              <td>59.99</td>
+            </tr>
+            <tr>
+              <td>D</td>
+              <td>50</td>
+              <td>54.99</td>
+            </tr>
+            <tr>
+              <td>F</td>
+              <td>0</td>
+              <td>49.99</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Export คะแนน</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Grades > Export</strong> > เลือก Format (Excel / CSV / ODS)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก Grade items > ตั้ง Options > คลิก <strong>"Download"</strong></div>
+        </div>
+        <h3>Quick Grading — ให้คะแนนเร็ว</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Grader report</strong> > เปิด <strong>"Turn editing on"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">พิมพ์คะแนนในช่องโดยตรง > <strong>"Save changes"</strong></div>
+        </div>
+        <div class="info-box"><strong>💡 Tip:</strong> Quick grading เหมาะกับการให้คะแนนทีละมากๆ เช่น คะแนนการมีส่วนร่วม
+          (Participation) หรือคะแนน Forum</div>
+        <div class="image-container">
+          <img src="img/16.png" alt="Gradebook">
+          <div class="image-caption">รูปที่ 16: หน้าจอ Gradebook</div>
+        </div>
+      </section>
+
+      <!-- Completion Tracking -->
+      <section id="completion">
+        <h2>Completion Tracking — การติดตามความก้าวหน้า</h2>
+        <h3>1. เปิด Completion ในรายวิชา</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Course settings > Edit settings</strong> > ส่วน Completion tracking</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">ตั้ง <strong>Enable completion tracking = Yes</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Save and display"</strong></div>
+        </div>
+        <h3>2. ตั้งเงื่อนไข Completion ในแต่ละ Activity</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เปิด Editing > Edit Settings ที่ Activity > ส่วน <strong>"Activity completion"</strong>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก Completion tracking (ดูตารางด้านล่าง)</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>คำอธิบาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Do not indicate</strong></td>
+              <td>ไม่ติดตาม</td>
+            </tr>
+            <tr>
+              <td><strong>Students can manually mark</strong></td>
+              <td>ผู้เรียนทำเครื่องหมายเอง</td>
+            </tr>
+            <tr>
+              <td><strong>Show as complete when conditions are met</strong></td>
+              <td>สำเร็จอัตโนมัติเมื่อตรงเงื่อนไข</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4>เงื่อนไข Completion ที่ตั้งได้</h4>
+        <ul>
+          <li><strong>View:</strong> ต้องเข้าดู Activity</li>
+          <li><strong>Submit:</strong> ต้องส่งงาน (Assignment)</li>
+          <li><strong>Receive a grade:</strong> ต้องได้รับคะแนน</li>
+          <li><strong>Receive a passing grade:</strong> ต้องได้คะแนนผ่านเกณฑ์</li>
+          <li><strong>All attempts completed:</strong> ต้องทำครบทุกรอบ (Quiz)</li>
+        </ul>
+        <h3>3. ดูรายงาน Activity Completion</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">ในรายวิชา > <strong>Reports > Activity completion</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">จะเห็นตาราง: แนวตั้ง = ผู้เรียน, แนวนอน = Activity, เครื่องหมาย ✅/❌</div>
+        </div>
+        <h3>4. Course Completion — ติดตามการสำเร็จรายวิชา</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Course settings > Course completion</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">ตั้งเงื่อนไข: Activity completion / Grade / Duration / Manual</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Save changes"</strong></div>
+        </div>
+        <div class="info-box green"><strong>✅ ประโยชน์:</strong> ออก Certificate อัตโนมัติเมื่อสำเร็จรายวิชา,
+          ติดตามนักเรียนที่ตามไม่ทัน, ใช้ร่วมกับ Restrict Access เพื่อบังคับลำดับเรียน</div>
+        <div class="image-container">
+          <img src="img/17.png" alt="Completion tracking">
+          <div class="image-caption">รูปที่ 17: หน้าจอ Activity completion report</div>
+        </div>
+      </section>
+
+      <!-- Reports -->
+      <section id="reports">
+        <h2>Reports — การรายงานผล</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>รายงาน</th>
+              <th>เส้นทาง</th>
+              <th>ข้อมูลที่แสดง</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Logs</strong></td>
+              <td>Reports > Logs</td>
+              <td>ประวัติการเข้าใช้งานทั้งหมด</td>
+            </tr>
+            <tr>
+              <td><strong>Live logs</strong></td>
+              <td>Reports > Live logs</td>
+              <td>การใช้งาน real-time (เหมาะดูระหว่างสอบ)</td>
+            </tr>
+            <tr>
+              <td><strong>Activity report</strong></td>
+              <td>Reports > Activity report</td>
+              <td>จำนวนครั้งที่เข้าถึง Activity</td>
+            </tr>
+            <tr>
+              <td><strong>Course participation</strong></td>
+              <td>Reports > Course participation</td>
+              <td>การมีส่วนร่วมแยกราย Activity</td>
+            </tr>
+            <tr>
+              <td><strong>Activity completion</strong></td>
+              <td>Reports > Activity completion</td>
+              <td>สถานะการทำกิจกรรมของทุกคน</td>
+            </tr>
+            <tr>
+              <td><strong>Course completion</strong></td>
+              <td>Reports > Course completion</td>
+              <td>สถานะการสำเร็จรายวิชา</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Quiz Statistics</h3>
+        <p>เข้า Quiz > <strong>Results > Statistics</strong> เพื่อดู:</p>
+        <ul>
+          <li>คะแนนเฉลี่ย, สูงสุด, ต่ำสุด</li>
+          <li>ค่า Discrimination index ของแต่ละข้อ</li>
+          <li>ค่า Facility index (ง่าย-ยาก)</li>
+          <li>กราฟการกระจายคะแนน</li>
+        </ul>
+        <div class="info-box"><strong>💡 Tip:</strong> ใช้ Course participation report เพื่อหาผู้เรียนที่ไม่มีส่วนร่วม
+          แล้วส่งข้อความเตือนโดยตรงจากหน้ารายงาน</div>
+        <div class="image-container">
+          <img src="img/18.png" alt="Reports">
+          <div class="image-caption">รูปที่ 18: หน้าจอ Reports</div>
+        </div>
+      </section>
+
+      <!-- Backup -->
+      <section id="backup">
+        <h2>Backup &amp; Restore — สำรองและกู้คืน</h2>
+        <h3>Backup รายวิชา</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">เข้ารายวิชา > Course administration > <strong>Backup</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก items (Activities, User data, Files) > <strong>"Perform backup"</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">ดาวน์โหลดไฟล์ backup (.mbz)</div>
+        </div>
+        <h3>Restore รายวิชา</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Course administration > <strong>Restore</strong> > อัปโหลด .mbz</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือก: Restore as new / Merge / Replace</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Perform restore"</strong></div>
+        </div>
+        <div class="info-box"><strong>💡 Tip:</strong> Backup เป็นประจำ โดยเฉพาะก่อนการเปลี่ยนแปลงครั้งใหญ่ เก็บไฟล์
+          backup ไว้ภายนอกระบบ</div>
+        <h3>Reset Course — ล้างข้อมูลผู้เรียน</h3>
+        <p>ใช้เมื่อต้องการใช้รายวิชาซ้ำในภาคเรียนใหม่ โดยไม่ลบเนื้อหาและ Activity:</p>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Course administration > <strong>Reset</strong></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">เลือกข้อมูลที่ต้องการล้าง: Enrolments, Grades, Forum posts, Assignment submissions,
+            Quiz attempts</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">คลิก <strong>"Reset course"</strong></div>
+        </div>
+        <div class="info-box red"><strong>⚠️ ระวัง:</strong> Reset จะลบข้อมูลผู้เรียนถาวร — ควร Backup ก่อนเสมอ!</div>
+        <div class="image-container">
+          <img src="img/19.png" alt="Backup and restore">
+          <div class="image-caption">รูปที่ 19: หน้าจอ Backup & Restore</div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <h2>FAQ — คำถามที่พบบ่อย</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ปัญหา</th>
+              <th>วิธีแก้ไข</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>สร้างรายวิชาไม่ได้</td>
+              <td>ตรวจสอบว่าได้รับ Role "Course Creator" แล้ว ติดต่อ Admin</td>
+            </tr>
+            <tr>
+              <td>นักเรียนเข้ารายวิชาไม่ได้</td>
+              <td>ตรวจสอบ Enrolment methods เปิดอยู่ วันที่ enrolment ยังไม่หมด</td>
+            </tr>
+            <tr>
+              <td>ไฟล์อัปโหลดไม่ได้</td>
+              <td>ตรวจสอบขนาดไฟล์ (ปกติ 50-100MB) และประเภทที่อนุญาต</td>
+            </tr>
+            <tr>
+              <td>Quiz ไม่แสดงคำถาม</td>
+              <td>ตรวจสอบว่าเพิ่มคำถามเข้า Quiz แล้ว (Edit quiz > Add)</td>
+            </tr>
+            <tr>
+              <td>คะแนนไม่แสดงใน Gradebook</td>
+              <td>ตรวจสอบ Activity มีการตั้งค่า Grade ไว้หรือไม่</td>
+            </tr>
+            <tr>
+              <td>นักเรียนมองไม่เห็น Activity</td>
+              <td>ตรวจสอบ Visibility (ไอคอนตา) และ Restrict access conditions</td>
+            </tr>
+            <tr>
+              <td>เวลา Quiz ไม่ตรง</td>
+              <td>ตรวจสอบ Timezone ของระบบและผู้ใช้ให้ตรงกัน</td>
+            </tr>
+            <tr>
+              <td>Completion ไม่แสดง</td>
+              <td>ตรวจสอบ Enable completion tracking ใน Course settings และตั้งค่าในแต่ละ Activity</td>
+            </tr>
+            <tr>
+              <td>Backup ไฟล์ใหญ่เกินไป</td>
+              <td>เลือกไม่รวม User data เพื่อลดขนาด หรือ Backup เฉพาะ Activity ที่ต้องการ</td>
+            </tr>
+            <tr>
+              <td>Reset รายวิชาไม่ได้</td>
+              <td>ใช้ Course administration > Reset แทนการลบมือ</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    &copy; 2025 Moodle Course Creator Manual — Inteqc Group
+  </footer>
+
+  <script>
+    // Active nav highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id'); });
+      navLinks.forEach(a => { a.classList.remove('active'); if (a.getAttribute('href') === '#' + current) a.classList.add('active'); });
+    });
+  </script>
+</body>
+
+</html>
